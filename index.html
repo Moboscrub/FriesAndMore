@@ -6,90 +6,182 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #fff; color: #333; }
+
+    /* Header/Nav */
     header {
       background: #fff;
-      padding: 1rem 0 1rem 0;
+      padding: 1rem 0;
       text-align: center;
       position: sticky; top: 0; z-index: 10;
     }
     header .nav-container {
-      max-width: 1200px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between; padding: 0 2rem;
-    }
-    header nav ul { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; }
-    header nav ul li a { color: #222; font-size: .95rem; text-decoration: none; }
-    .btn-order {
-      background: #E4821E; color: #fff; padding: 0.6rem 1.2rem;
-      border-radius: 4px; font-weight: 600; transition: background .2s; border: none; cursor: pointer;
-    }
-    .btn-order:hover { background: #b76f16; }
-    .slider {
-      max-width: 1100px; margin: 2rem auto 0;
-      position: relative; overflow: hidden; background: #fff;
-      border-radius: 0; box-shadow: none;
-    }
-    .slides { display: flex; transition: transform 0.6s cubic-bezier(.6,0,.4,1); }
-    .slide {
-      flex: 0 0 100%; display: flex; background: #fff;
-      min-width: 100%; align-items: center;
-      border-radius: 0; box-shadow: none;
-    }
-    .slide img {
-      width: 50%; height: 400px; object-fit: contain; flex-shrink: 0; background: #fff; border-radius: 0; box-shadow: none;
-    }
-    .slide-content {
-      width: 50%; padding: 3rem; display: flex; flex-direction: column; justify-content: center;
-      background: none; box-shadow: none;
-    }
-    .slide-content .label { font-size: 0.85rem; text-transform: uppercase; color: #E4821E; margin-bottom: 0.5rem; letter-spacing: 1px; }
-    .slide-content h2 { font-size: 2.5rem; color: #222; margin-bottom: 0.75rem; }
-    .slide-content p { font-size: 1.1rem; color: #555; margin-bottom: 1.5rem; line-height: 1.4; }
-    .slide-content .btn-order { align-self: flex-start; }
-
-    /* Modern full-width nav buttons */
-    .nav-btns {
-      position: absolute;
-      top: 0;
-      left: 0px;   /* all the way to left */
-      right: 0px;  /* all the way to right */
-      height: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      pointer-events: none; /* so they don't block slide clicks */
+      padding: 0 2rem;
+    }
+    header nav ul {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    header nav ul li a {
+      color: #222;
+      font-size: .95rem;
+      text-decoration: none;
+    }
+    .btn-order {
+      background: #E4821E;
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: background .2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-order:hover { background: #b76f16; }
+
+    /* Slider Containers */
+    .slider {
+      max-width: 1100px;
+      margin: 2rem auto 0;
+      position: relative;
+      overflow: visible; /* allow arrows outside */
+    }
+    .slider-inner {
+      overflow: hidden; /* hide non-active slides */
+      border-radius: 0;
+      box-shadow: none;
+      background: #fff;
+    }
+
+    /* Slides */
+    .slides {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(.6,0,.4,1);
+      will-change: transform;
+    }
+    .slide {
+      flex: 0 0 100%;
+      display: flex;
+      align-items: center;
+      min-width: 100%;
+      background: #fff;
+    }
+    .slide img {
+      width: 50%;
+      height: 400px;
+      object-fit: contain;
+      flex-shrink: 0;
+      background: #fff;
+    }
+    .slide-content {
+      width: 50%;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .slide-content .label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: #E4821E;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+    .slide-content h2 {
+      font-size: 2.5rem;
+      color: #222;
+      margin-bottom: .75rem;
+    }
+    .slide-content p {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 1.5rem;
+      line-height: 1.4;
+    }
+    .slide-content .btn-order {
+      align-self: flex-start;
+    }
+
+    /* Nav Buttons Outside */
+    .nav-btns {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      pointer-events: none;
       z-index: 2;
     }
     .nav-btns button {
       pointer-events: auto;
-      width: 64px;
-      height: 64px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.73);
-      box-shadow: 0 6px 22px 0 rgba(0,0,0,0.09);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       color: #E4821E;
-      font-size: 2.1rem;
+      font-size: 1.8rem;
       border: none;
       cursor: pointer;
-      transition: background 0.22s, box-shadow 0.22s, color 0.18s;
-      outline: none;
-      position: relative;
+      transition: background .22s, box-shadow .22s, color .18s;
       user-select: none;
     }
     .nav-btns button:hover {
       background: #E4821E;
       color: #fff;
-      box-shadow: 0 10px 36px 0 rgba(228, 130, 30, 0.12);
+      box-shadow: 0 10px 36px rgba(228,130,30,0.12);
       transform: scale(1.08);
     }
-    .dots { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 3;}
-    .dots button { width: 10px; height: 10px; background: #ddd; border-radius: 50%; transition: background 0.2s; border:none;}
-    .dots button.active { background: #E4821E; }
-    .promo { background: #E4821E; color: #fff; text-align: center; padding: 1rem 0; font-size: 1rem; font-weight: 600; margin-top: 2rem; }
+    #prev { left: -40px; }
+    #next { right: -40px; }
 
-    /* SOFT, TRANSPARENT, NO BORDER CARDS BELOW */
+    /* Dots */
+    .dots {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 3;
+    }
+    .dots button {
+      width: 10px;
+      height: 10px;
+      background: #ddd;
+      border-radius: 50%;
+      border: none;
+      transition: background .2s;
+    }
+    .dots button.active {
+      background: #E4821E;
+    }
+
+    /* Promo Bar */
+    .promo {
+      background: #E4821E;
+      color: #fff;
+      text-align: center;
+      padding: 1rem 0;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 2rem;
+    }
+
+    /* Flavors Section */
     .flavors {
       max-width: 1400px;
       margin: 0 auto 4rem;
@@ -103,31 +195,27 @@
       width: 280px;
       background: transparent;
       border: none;
-      border-radius: 0;
-      padding: 1.5rem 1rem 2rem 1rem;
-      margin: 1.5rem 0.5rem;
+      padding: 1.5rem 1rem 2rem;
       text-align: center;
       box-shadow: none;
-      transition: transform 0.15s;
+      transition: transform .15s;
     }
     .flavor-card:hover {
       transform: translateY(-2px) scale(1.03);
     }
     .flavor-image {
-      width: 140px; height: 140px;
+      width: 140px;
+      height: 140px;
       object-fit: contain;
-      margin-bottom: 1.3rem;
+      margin: 0 auto 1.3rem;
       border-radius: 50%;
-      box-shadow: none;
       background: none;
-      display: block;
-      margin-left: auto; margin-right: auto;
     }
     .flavor-name {
       font-size: 1.18rem;
       font-weight: 700;
       text-transform: uppercase;
-      margin-bottom: 0.8rem;
+      margin-bottom: .8rem;
       color: #d36c14;
       letter-spacing: 1.2px;
     }
@@ -140,31 +228,39 @@
     .flavor-card .btn-order {
       background: #e85c0e;
       color: #fff;
-      padding: 0.7rem 1.7rem;
+      padding: .7rem 1.7rem;
       border-radius: 22px;
       font-size: 1.1rem;
       font-weight: 700;
-      margin-top: 0.8rem;
-      box-shadow: 0 3px 12px 0 rgba(228,130,30,0.11);
+      margin-top: .8rem;
+      box-shadow: 0 3px 12px rgba(228,130,30,0.11);
       letter-spacing: 1.1px;
       border: none;
-      transition: background 0.18s, box-shadow 0.18s;
+      transition: background .18s, box-shadow .18s;
     }
     .flavor-card .btn-order:hover {
       background: #cc4500;
-      box-shadow: 0 7px 26px 0 rgba(228,130,30,0.18);
+      box-shadow: 0 7px 26px rgba(228,130,30,0.18);
     }
+
+    /* Responsive */
     @media (max-width: 1200px) {
       .slider { max-width: 97vw; }
-      .nav-btns { left: -30px; right: -30px; }
     }
     @media (max-width: 900px) {
       .slide { flex-direction: column; }
-      .slide img, .slide-content { width: 100%; }
-      .slide img { height: 220px; border-radius: 0; }
-      .slide-content { padding: 2rem 1rem; }
-      .flavors { flex-direction: column; align-items: center; }
-      .nav-btns { left: -8vw; right: -8vw; }
+      .slide img {
+        width: 100%;
+        height: auto;
+        max-height: 250px;
+      }
+      .slide-content {
+        width: 100%;
+        padding: 1rem;
+      }
+      .dots {
+        bottom: 8px;
+      }
     }
   </style>
 </head>
@@ -186,50 +282,51 @@
   </header>
 
   <div class="slider">
-    <div class="slides">
-      <div class="slide">
-        <img src="original.png" alt="Original Poutine">
-        <div class="slide-content">
-          <div class="label">Featured</div>
-          <h2>Original Poutine</h2>
-          <p>Creamy cheese curds & savory gravy over golden fries.</p>
-          <button class="btn-order">Try Now</button>
+    <div class="slider-inner">
+      <div class="slides">
+        <div class="slide">
+          <img src="original.png" alt="Original Poutine">
+          <div class="slide-content">
+            <div class="label">Featured</div>
+            <h2>Original Poutine</h2>
+            <p>Creamy cheese curds & savory gravy over golden fries.</p>
+            <button class="btn-order">Try Now</button>
+          </div>
         </div>
-      </div>
-      <div class="slide">
-        <img src="texan.png" alt="The Texan">
-        <div class="slide-content">
-          <div class="label">New</div>
-          <h2>The Texan</h2>
-          <p>Smokey Brisket & Jalapeño</p>
-          <button class="btn-order">Try Now</button>
+        <div class="slide">
+          <img src="texan.png" alt="The Texan">
+          <div class="slide-content">
+            <div class="label">New</div>
+            <h2>The Texan</h2>
+            <p>Smokey Brisket & Jalapeño</p>
+            <button class="btn-order">Try Now</button>
+          </div>
         </div>
-      </div>
-      <div class="slide">
-        <img src="korean.png" alt="Korean Poutine">
-        <div class="slide-content">
-          <div class="label">Hot</div>
-          <h2>Korean Poutine</h2>
-          <p>Gochujang sauce & kimchi fries</p>
-          <button class="btn-order">Try Now</button>
+        <div class="slide">
+          <img src="korean.png" alt="Korean Poutine">
+          <div class="slide-content">
+            <div class="label">Hot</div>
+            <h2>Korean Poutine</h2>
+            <p>Gochujang sauce & kimchi fries</p>
+            <button class="btn-order">Try Now</button>
+          </div>
         </div>
-      </div>
-      <div class="slide">
-        <img src="butter-chicken.png" alt="Butter Chicken Poutine">
-        <div class="slide-content">
-          <div class="label">Spicy</div>
-          <h2>Butter Chicken Poutine</h2>
-          <p>Rich curry gravy & paneer curds.</p>
-          <button class="btn-order">Try Now</button>
+        <div class="slide">
+          <img src="butter-chicken.png" alt="Butter Chicken Poutine">
+          <div class="slide-content">
+            <div class="label">Spicy</div>
+            <h2>Butter Chicken Poutine</h2>
+            <p>Rich curry gravy & paneer curds.</p>
+            <button class="btn-order">Try Now</button>
+          </div>
         </div>
-      </div>
-      <div class="slide">
-        <img src="nashville-hot.png" alt="Nashville Hot Poutine">
-        <div class="slide-content">
-          <div class="label"></div>
-          <h2>Buffalo Chicken</h2>
-          <p>Buffalo Chicken Poutine</p>
-          <button class="btn-order">Try Now</button>
+        <div class="slide">
+          <img src="nashville-hot.png" alt="Buffalo Chicken">
+          <div class="slide-content">
+            <h2>Buffalo Chicken</h2>
+            <p>Buffalo Chicken Poutine</p>
+            <button class="btn-order">Try Now</button>
+          </div>
         </div>
       </div>
     </div>
@@ -252,7 +349,7 @@
     <div class="flavor-card">
       <img class="flavor-image" src="texan.png" alt="The Texan">
       <div class="flavor-name">The Texan</div>
-      <div class="flavor-desc">Brisket & Jalapeño </div>
+      <div class="flavor-desc">Brisket & Jalapeño</div>
       <button class="btn-order">Order Now</button>
     </div>
     <div class="flavor-card">
@@ -268,33 +365,42 @@
       <button class="btn-order">Order Now</button>
     </div>
     <div class="flavor-card">
-      <img class="flavor-image" src="nashville-hot.png" alt="Nashville Hot">
+      <img class="flavor-image" src="nashville-hot.png" alt="Buffalo Chicken">
       <div class="flavor-name">Buffalo Chicken</div>
       <div class="flavor-desc">Buffalo Chicken Poutine</div>
       <button class="btn-order">Order Now</button>
     </div>
   </section>
+
   <script>
     (function(){
       const slides = document.querySelectorAll('.slide');
-      const container = document.querySelector('.slides');
+      const container = document.querySelector('.slider-inner .slides');
       const dotsContainer = document.getElementById('dots');
       let idx = 0;
+
       slides.forEach((_, i) => {
         const btn = document.createElement('button');
-        if(i===0) btn.classList.add('active');
+        if (i === 0) btn.classList.add('active');
         btn.addEventListener('click', () => go(i));
         dotsContainer.appendChild(btn);
       });
       const dots = dotsContainer.querySelectorAll('button');
+
       function update() {
-        container.style.transform = `translateX(-${idx*100}%)`;
-        dots.forEach((d,i)=> d.classList.toggle('active', i===idx));
+        container.style.transform = `translateX(-${idx * 100}%)`;
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
       }
-      function go(i) { idx = (i + slides.length) % slides.length; update(); }
-      document.getElementById('prev').onclick = ()=> go(idx-1);
-      document.getElementById('next').onclick = ()=> go(idx+1);
-      setInterval(()=> go(idx+1), 5000);
+
+      function go(i) {
+        idx = (i + slides.length) % slides.length;
+        update();
+      }
+
+      document.getElementById('prev').addEventListener('click', () => go(idx - 1));
+      document.getElementById('next').addEventListener('click', () => go(idx + 1));
+
+      setInterval(() => go(idx + 1), 5000);
     })();
   </script>
 </body>
